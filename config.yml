@@ -2,7 +2,6 @@
 # Packages to install via apt
 apt_installed_packages:
   - zsh
-  - gnome-tweaks
   - wezterm
   - build-essential
   - procps
@@ -11,6 +10,8 @@ apt_installed_packages:
   - git
   - rpi-imager
   - dnsutils
+  - gnupg
+  - pass
 
 # AppImages to install
 app_images:
@@ -59,4 +60,3 @@ git_config:
     value: true
   - name: core.editor
     value: nvim
-
