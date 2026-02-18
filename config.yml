@@ -43,6 +43,7 @@ homebrew_cask_apps:
   - hammerspoon
   - hiddenbar
   - brainfm
+  - font-maple-mono-nf
 
 # Docker settings
 docker_users:
