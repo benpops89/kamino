@@ -1,0 +1,20 @@
+---
+homebrew_packages:
+  - gcc
+  - openssl@3
+  - git
+
+homebrew_cask_apps:
+  - raycast
+  - obsidian
+  - wezterm
+  - ghostty
+  - todoist
+  - docker
+  - dbeaver-community
+  - spotify
+  - slack
+  - hammerspoon
+  - hiddenbar
+  - brainfm
+  - font-maple-mono-nf

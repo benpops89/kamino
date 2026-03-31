@@ -1,0 +1,24 @@
+---
+dotfiles_repo: git@github.com/benpops89/dotfiles.git
+dotfiles_dir: "{{ ansible_user_dir }}/dotfiles"
+
+dotfiles_symlinks:
+  - .zshrc
+  - .zshenv
+  - .aliases
+  - .gitconfig
+  - .config/opencode
+  - .config/ghostty
+  - .config/nvim
+  - .config/nvim-test
+  - .config/starship.toml
+  - .config/tmux
+  - .config/lazygit
+  - .config/sheldon
+  - .config/sesh
+  - .config/television
+  - .config/wezterm
+  - .config/mise
+  - .config/fnox
+
+maple_font_version: "v7.9"

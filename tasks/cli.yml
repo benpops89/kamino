@@ -1,0 +1,28 @@
+---
+# macOS - use Homebrew
+- name: Install uv on macOS
+  when: ansible_facts['os_family'] == "Darwin"
+  community.general.homebrew:
+    name: uv
+    state: present
+
+- name: Install Proton Pass CLI on macOS
+  when: ansible_facts['os_family'] == "Darwin"
+  community.general.homebrew:
+    name: protonpass/tap/pass-cli
+    state: present
+
+# Linux - use install scripts with idempotency
+- name: Install uv on Linux
+  when: ansible_facts['os_family'] != "Darwin"
+  ansible.builtin.shell: |
+    curl -LsSf https://astral.sh/uv/install.sh | sh
+  args:
+    creates: "{{ ansible_user_dir }}/.local/bin/uv"
+
+- name: Install Proton Pass CLI on Linux
+  when: ansible_facts['os_family'] != "Darwin"
+  ansible.builtin.shell: |
+    curl -fsSL https://proton.me/download/pass-cli/install.sh | sh
+  args:
+    creates: "{{ ansible_user_dir }}/.local/bin/pass-cli"

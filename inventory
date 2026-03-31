@@ -1,2 +1,6 @@
-[all]
-127.0.0.1 ansible_connection=local
+[macos]
+corellia ansible_host=localhost ansible_connection=local
+
+[linux]
+endor ansible_host=localhost ansible_connection=local
+jakku ansible_host=localhost ansible_connection=local

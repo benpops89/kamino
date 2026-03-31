@@ -1,0 +1,20 @@
+---
+- name: Check target status
+  ansible.builtin.stat:
+    path: "{{ ansible_user_dir }}/{{ symlink_item }}"
+    follow: false
+  register: target_stat
+
+- name: Remove existing files/directories if not a symlink
+  ansible.builtin.file:
+    path: "{{ ansible_user_dir }}/{{ symlink_item }}"
+    state: absent
+  when: target_stat.stat.exists and not target_stat.stat.islnk
+  changed_when: false
+
+- name: Create symlink
+  ansible.builtin.file:
+    src: "{{ dotfiles_dir }}/{{ symlink_item }}"
+    dest: "{{ ansible_user_dir }}/{{ symlink_item }}"
+    state: link
+    force: yes

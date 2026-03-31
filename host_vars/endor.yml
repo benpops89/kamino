@@ -1,0 +1,5 @@
+---
+unit_name: endor
+ansible_os_family: Debian
+linux_packages_extra:
+  - wezterm

@@ -1,0 +1,14 @@
+---
+- name: Install Docker on Linux
+  when: ansible_facts['os_family'] != "Darwin"
+  block:
+    - name: Include Docker role
+      ansible.builtin.include_role:
+        name: geerlingguy.docker
+  become: true
+
+- name: Install Docker Desktop on macOS
+  when: ansible_facts['os_family'] == "Darwin"
+  community.general.homebrew_cask:
+    name: docker
+    state: present

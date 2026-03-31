@@ -1,0 +1,36 @@
+---
+- name: Update apt cache
+  when: ansible_facts['os_family'] == "Debian"
+  ansible.builtin.apt:
+    update_cache: yes
+    cache_valid_time: 3600
+  become: true
+
+- name: Install Linux packages
+  when: ansible_facts['os_family'] != "Darwin"
+  ansible.builtin.package:
+    name: "{{ linux_packages + linux_packages_extra | default([]) }}"
+    state: present
+
+- name: Configure sudoers for AUR builds
+  when: ansible_facts['os_family'] == "Archlinux"
+  ansible.builtin.lineinfile:
+    path: /etc/sudoers.d/99-aur-builder
+    line: "{{ ansible_facts['user_id'] }} ALL=(ALL) NOPASSWD: /usr/bin/pacman, /usr/bin/yay, /usr/bin/makepkg"
+    create: yes
+    mode: '0440'
+    validate: 'visudo -cf %s'
+  become: true
+
+- name: Install AUR packages on Arch
+  when: ansible_facts['os_family'] == "Archlinux"
+  kewlfft.aur.aur:
+    name: "{{ aur_packages | default([]) }}"
+    state: present
+  become: true
+  become_user: "{{ ansible_facts['user_id'] }}"
+
+- name: Install Homebrew and packages
+  when: ansible_facts['os_family'] == "Darwin"
+  ansible.builtin.include_role:
+    name: geerlingguy.mac.homebrew

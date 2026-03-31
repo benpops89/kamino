@@ -1,0 +1,16 @@
+---
+linux_packages:
+  - zsh
+
+linux_packages_extra: []
+
+app_images:
+  - name: obsidian
+    url: https://github.com/obsidianmd/obsidian-releases/releases/download/v1.5.12/Obsidian-1.5.12.AppImage
+  - name: bambu
+    url: https://github.com/bambulab/BambuStudio/releases/download/v02.00.01.50/Bambu_Studio_ubuntu-20.04_v02.00.01.50.AppImage
+
+maple_mono_sha256: "8248d6260660be1066b5ebe90d25131582df8383f38db1c284dd1f2dc9d2b46e"
+
+docker_users:
+  - "{{ ansible_facts['user_id'] }}"

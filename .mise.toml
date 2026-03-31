@@ -1,7 +1,0 @@
-[tasks.macos]
-description = "Run macos playbook"
-run = "ansible-playbook macos.yml --ask-become-pass"
-
-[tasks.debian]
-description = "Run debian playbook"
-run = "ansible-playbook debian.yml --ask-become-pass"

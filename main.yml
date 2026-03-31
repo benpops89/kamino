@@ -1,0 +1,66 @@
+---
+- name: Kamino Unit Deployment
+  hosts: all
+  handlers:
+    - import_tasks: handlers/main.yml
+
+  vars_files:
+    - group_vars/all.yml
+
+  pre_tasks:
+    - name: Gather facts
+      ansible.builtin.setup:
+
+    - name: Set legacy fact variables
+      ansible.builtin.set_fact:
+        ansible_distribution: "{{ ansible_facts['distribution'] }}"
+        ansible_os_family: "{{ ansible_facts['os_family'] }}"
+        ansible_architecture: "{{ ansible_facts['architecture'] }}"
+        ansible_user_dir: "{{ ansible_facts['user_dir'] }}"
+        ansible_env: "{{ ansible_facts['env'] }}"
+
+    - name: Commencing genetic sequencing
+      ansible.builtin.debug:
+        msg: "Initiating clone sequence for unit {{ inventory_hostname }} ({{ ansible_facts['os_family'] }})"
+
+  tasks:
+    - name: Adding repositories
+      import_tasks: tasks/repos.yml
+
+    - name: Installing packages
+      import_tasks: tasks/pkgs.yml
+
+    - name: Configuring Docker
+      import_tasks: tasks/docker.yml
+
+    - name: Installing fonts
+      import_tasks: tasks/fonts.yml
+
+    - name: Configuring dotfiles
+      ansible.builtin.include_role:
+        name: dotfiles
+      loop: "{{ dotfiles_symlinks }}"
+      vars:
+        symlink_item: "{{ item }}"
+
+    - name: Installing CLI tools
+      import_tasks: tasks/cli.yml
+
+    # - name: Installing mise and tools
+    #   import_tasks: tasks/mise.yml
+
+    - name: Installing AppImages
+      include_tasks: tasks/appimages.yml
+      loop: "{{ app_images | default([]) }}"
+      when: ansible_facts['os_family'] == "Debian"
+
+  post_tasks:
+    - name: Set shell to zsh
+      ansible.builtin.user:
+        name: "{{ ansible_facts['user_id'] }}"
+        shell: /bin/zsh
+      become: true
+
+    - name: Unit is combat-ready
+      ansible.builtin.debug:
+        msg: "Unit {{ inventory_hostname }} is combat-ready"

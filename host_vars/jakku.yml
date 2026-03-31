@@ -1,0 +1,5 @@
+---
+unit_name: jakku
+ansible_os_family: Archlinux
+aur_packages:
+  - bambustudio-bin

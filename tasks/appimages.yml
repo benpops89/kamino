@@ -1,28 +1,29 @@
 ---
 - name: Create directory for AppImage
   ansible.builtin.file:
-    path: "{{ ansible_env['HOME']}}/Apps/{{ item.name }}"
+    path: "{{ ansible_user_dir }}/Apps/{{ item.name }}"
     state: directory
 
 - name: Download AppImage from GitHub
   ansible.builtin.get_url:
     url: "{{ item.url }}"
-    dest: "{{ ansible_env['HOME'] }}/Apps/{{ item.name }}/{{ item.name | title }}.AppImage"
+    dest: "{{ ansible_user_dir }}/Apps/{{ item.name }}/{{ item.name | title }}.AppImage"
     mode: "u+x"
 
 - name: Copy the AppImage icon to correct location
   ansible.builtin.copy:
     src: "icons/{{ item.name }}.png"
-    dest: "{{ lookup('env', 'HOME') }}/Apps/{{ item.name }}/{{ item.name }}.png"
+    dest: "{{ ansible_user_dir }}/Apps/{{ item.name }}/{{ item.name }}.png"
 
 - name: Create desktop file for AppImage
   ansible.builtin.template:
     src: "templates/{{ item.name }}.desktop.j2"
-    dest: "{{ lookup('env', 'HOME') }}/Apps/{{ item.name }}/{{ item.name }}.desktop"
+    dest: "{{ ansible_user_dir }}/Apps/{{ item.name }}/{{ item.name }}.desktop"
 
 - name: Create symlink to applications
-  become: true
   ansible.builtin.file:
-    src: "{{ ansible_env['HOME'] }}/Apps/{{ item.name }}/{{ item.name }}.desktop"
+    src: "{{ ansible_user_dir }}/Apps/{{ item.name }}/{{ item.name }}.desktop"
     dest: "/usr/share/applications/{{ item.name }}.desktop"
     state: link
+    force: yes
+  become: true

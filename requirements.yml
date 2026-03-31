@@ -1,7 +1,14 @@
 ---
 roles:
-  - name: elliotweiser.osx-command-line-tools
   - name: geerlingguy.docker
+    version: 7.4.0
 
 collections:
+  - name: git+https://github.com/benpops89/ansible-collection-mise
+    type: git
+    version: v0.2.3
+  - name: kewlfft.aur
   - name: geerlingguy.mac
+    version: 5.0.0
+  - name: community.general
+    version: 12.5.0

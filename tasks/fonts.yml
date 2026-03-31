@@ -1,0 +1,43 @@
+---
+- name: Install Maple Mono NF on Arch (via AUR)
+  when: ansible_facts['os_family'] == "Archlinux"
+  kewlfft.aur.aur:
+    name: ttf-maplemono-nf-unhinted
+    state: present
+
+- name: Install Maple Mono NF on macOS
+  when: ansible_facts['os_family'] == "Darwin"
+  community.general.homebrew_cask:
+    name: font-maple-mono-nf
+    state: present
+
+- name: Install Maple Mono NF on Debian
+  when: ansible_facts['os_family'] == "Debian"
+  block:
+    - name: Create fonts directory
+      ansible.builtin.file:
+        path: "{{ ansible_user_dir }}/.local/share/fonts/MapleMono"
+        state: directory
+        mode: '0755'
+      become: true
+
+    - name: Download Maple Mono NF
+      ansible.builtin.get_url:
+        url: "https://github.com/Subframe7536/Maple-font/releases/download/{{ maple_font_version }}/MapleMono-NF.zip"
+        dest: "{{ ansible_user_dir }}/.local/share/fonts/MapleMono.zip"
+        mode: '0644'
+        checksum: "sha256:{{ maple_mono_sha256 }}"
+
+    - name: Check if fonts are extracted
+      ansible.builtin.find:
+        paths: "{{ ansible_user_dir }}/.local/share/fonts/MapleMono"
+        file_type: file
+      register: maple_fonts_check
+
+    - name: Extract Maple Mono NF
+      ansible.builtin.unarchive:
+        src: "{{ ansible_user_dir }}/.local/share/fonts/MapleMono.zip"
+        dest: "{{ ansible_user_dir }}/.local/share/fonts/MapleMono"
+        remote_src: yes
+      notify: Rebuild font cache
+      when: maple_fonts_check.files | length == 0

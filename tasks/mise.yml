@@ -1,0 +1,22 @@
+---
+# Install mise on macOS via Homebrew
+- name: Install mise on macOS
+  when: ansible_facts['os_family'] == "Darwin"
+  community.general.homebrew:
+    name: mise
+    state: present
+
+# Install mise on Linux via install script
+- name: Install mise on Linux
+  when: ansible_facts['os_family'] != "Darwin" and inventory_hostname != "jakku"
+  ansible.builtin.shell: |
+    curl https://mise.run | sh
+  args:
+    creates: "{{ ansible_user_dir }}/.local/bin/mise"
+  become: true
+
+# Sync mise tools (all hosts including jakku)
+- name: Sync mise tools
+  benpops89.mise.mise_sync:
+    global: true
+    trust: true

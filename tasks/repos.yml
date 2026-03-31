@@ -1,0 +1,14 @@
+---
+- name: Add wezterm apt repository
+  when: ansible_facts['os_family'] == "Debian"
+  ansible.builtin.deb822_repository:
+    name: wezterm
+    uris:
+      - https://apt.fury.io/wez/
+    suites:
+      - '*'
+    components:
+      - '*'
+    signed_by: https://apt.fury.io/wez/gpg.key
+    state: present
+  become: true
