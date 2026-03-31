@@ -126,7 +126,7 @@ install_ansible_deps() {
 }
 
 run_playbook() {
-  if [ -z "$GITHUB_TOKEN" ] && [ -t 0 ]; then
+  if [ -z "$GITHUB_TOKEN" ]; then
     echo "GitHub token is used by mise to avoid rate limits when installing tools."
     printf "Enter GitHub token (press Enter to skip): "
     read -r GITHUB_TOKEN
