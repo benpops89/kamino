@@ -6,7 +6,7 @@ if [ ! -t 0 ]; then
   curl -fsSL https://raw.githubusercontent.com/benpops89/kamino/main/bootstrap.sh -o /tmp/kamino.sh
   chmod +x /tmp/kamino.sh
   echo "Running interactively..."
-  exec /tmp/kamino.sh
+  exec /tmp/kamino.sh < /dev/tty
 fi
 
 HOST="${KAMINO_UNIT:-all}"
